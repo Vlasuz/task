@@ -1,0 +1,43 @@
+import { useNavigate } from "@tanstack/react-router";
+import axios from "axios";
+import { useState } from "react";
+
+interface signInProps {
+  emailField: string;
+  passwordField: string;
+  resetForm: () => void;
+}
+
+export const useSignIn = (props: signInProps) => {
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setErrorMessage("");
+
+    const body = {
+      email: props.emailField,
+      password: props.passwordField,
+    };
+
+    await axios
+      .post("https://user1721711071996.requestly.tech/signin?", body)
+      .then((res) => {
+        if (res.status >= 200 && res.status < 300) {
+          console.log(res.data);
+
+          navigate({ to: `/`, search: {name: res?.data?.name} });
+          props.resetForm();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+
+        setErrorMessage(err?.response?.data?.message ?? err.message);
+      });
+  };
+
+  return { handleSubmit, errorMessage };
+};
