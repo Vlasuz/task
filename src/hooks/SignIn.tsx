@@ -1,6 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useState } from "react";
+import { IUser } from "../types";
 
 interface signInProps {
   emailField: string;
@@ -24,7 +25,7 @@ export const useSignIn = (props: signInProps) => {
 
     await axios
       .post("https://user1721711071996.requestly.tech/signin?", body)
-      .then((res) => {
+      .then((res: AxiosResponse<IUser>) => {
         if (res.status >= 200 && res.status < 300) {
           console.log(res.data);
 
@@ -32,7 +33,7 @@ export const useSignIn = (props: signInProps) => {
           props.resetForm();
         }
       })
-      .catch((err) => {
+      .catch((err: AxiosError) => {
         console.log(err);
 
         setErrorMessage(err?.response?.data?.message ?? err.message);

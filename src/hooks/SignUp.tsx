@@ -1,6 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useState } from "react";
+import { IUser } from "../types";
 
 interface signUpProps {
   userNameField: string;
@@ -26,13 +27,13 @@ export const useSignUp = (props: signUpProps) => {
 
     await axios
       .post("https://crm.web-hub.online/api/register", body)
-      .then((res) => {
+      .then((res: AxiosResponse<IUser>) => {
         if (res.status >= 200 && res.status < 300) {
           navigate({to: '/'})
           props.resetForm();
         }
       })
-      .catch((err) => {
+      .catch((err: AxiosError) => {
         setErrorMessage(err.message);
       });
   };
