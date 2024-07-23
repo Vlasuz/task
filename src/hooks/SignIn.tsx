@@ -60,7 +60,7 @@ export const useSignIn = (props: signInProps) => {
         setErrorMessage(err?.response?.data?.message ?? err.message);
       })
       .finally(() => {
-        setIsLoading(true);
+        setIsLoading(false);
       });
   };
 
