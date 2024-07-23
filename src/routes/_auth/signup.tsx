@@ -14,7 +14,7 @@ function SignUp() {
   const [emailField, setEmailField] = useState<string>("");
   const [passwordField, setPasswordField] = useState<string>("");
 
-  const { handleSubmit, errorMessage } = useSignUp({
+  const { handleSubmit, errorMessage, isLoading } = useSignUp({
     emailField,
     passwordField,
     userNameField,
@@ -54,7 +54,7 @@ function SignUp() {
           className="block w-full border border-gray-400 rounded-md outline-none py-2 px-3 mt-2"
           placeholder="Enter you password"
         />
-        <button className="btn-form">
+        <button disabled={isLoading} className="btn-form">
           Sign Up
         </button>
 

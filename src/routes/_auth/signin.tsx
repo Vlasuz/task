@@ -13,7 +13,7 @@ function SignIn() {
   const [emailField, setEmailField] = useState<string>("");
   const [passwordField, setPasswordField] = useState<string>("");
 
-  const { handleSubmit, errorMessage } = useSignIn({ emailField, passwordField, resetForm });
+  const { handleSubmit, errorMessage, isLoading } = useSignIn({ emailField, passwordField, resetForm });
 
   function resetForm() {
     // Передаем только то, что нам надо привести к дефолтному значению
@@ -40,7 +40,7 @@ function SignIn() {
           className="block w-full border border-gray-400 rounded-md outline-none py-2 px-3 mt-2"
           placeholder="Enter you password"
         />
-        <button className="btn-form">
+        <button disabled={isLoading} className="btn-form">
           Sign In
         </button>
 

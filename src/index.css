@@ -4,6 +4,6 @@
 
 @layer components {
     .btn-form {
-        @apply py-2 px-2 border-2 border-blue-400 text-blue-400 block rounded-lg mt-5 hover:bg-blue-400 hover:text-white transition-all w-full
+        @apply py-2 px-2 border-2 border-blue-400 text-blue-400 block rounded-lg mt-5 hover:bg-blue-400 hover:text-white transition-all w-full disabled:hover:bg-transparent  disabled:hover:text-blue-400 disabled:opacity-50
     }
 }

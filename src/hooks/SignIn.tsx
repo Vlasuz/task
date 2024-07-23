@@ -2,6 +2,9 @@ import { useNavigate } from "@tanstack/react-router";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useState } from "react";
 import { IUser } from "../types";
+import { useDispatch } from "react-redux";
+import { setUser } from "../features/user";
+import { useCookies } from "react-cookie";
 
 interface signInProps {
   emailField: string;
@@ -9,14 +12,30 @@ interface signInProps {
   resetForm: () => void;
 }
 
+interface ICatchError {
+  response: {
+    data: {
+      message: string;
+    };
+  };
+}
+
+interface FetchUser extends IUser {
+  token: string;
+}
+
 export const useSignIn = (props: signInProps) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [, setCookie] = useCookies();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage("");
+    setIsLoading(true);
 
     const body = {
       email: props.emailField,
@@ -24,17 +43,26 @@ export const useSignIn = (props: signInProps) => {
     };
 
     await axios
-      .post("https://user1721711071996.requestly.tech/signin", body)
-      .then((res: AxiosResponse<IUser>) => {
+      .post("https://crm.web-hub.online/api/login", body)
+      .then((res: AxiosResponse<FetchUser>) => {
         if (res.status >= 200 && res.status < 300) {
-          navigate({ to: `/`, search: {name: res?.data?.name} });
+          navigate({ to: `/` });
+
+          const { token, ...user } = res.data;
+
+          setCookie("tokenForTestApp", token);
+          dispatch(setUser(user));
+
           props.resetForm();
         }
       })
-      .catch((err: AxiosError & {response: {data: {message: string}}}) => {
+      .catch((err: AxiosError & ICatchError) => {
         setErrorMessage(err?.response?.data?.message ?? err.message);
+      })
+      .finally(() => {
+        setIsLoading(true);
       });
   };
 
-  return { handleSubmit, errorMessage };
+  return { handleSubmit, errorMessage, isLoading };
 };

@@ -5,6 +5,8 @@ import "./index.css";
 
 import { routeTree } from "./routeTree.gen";
 import ErrorPage from "./components/ErrorPage";
+import { Provider } from "react-redux";
+import { store } from "./utils/reduxStore";
 
 const router = createRouter({
   routeTree,
@@ -19,8 +21,10 @@ declare module "@tanstack/react-router" {
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <div className="max-w-[1440px] mx-auto">
-      <RouterProvider router={router} />
-    </div>
+    <Provider store={store}>
+      <div className="max-w-[1440px] mx-auto">
+        <RouterProvider router={router} />
+      </div>
+    </Provider>
   </React.StrictMode>
 );
