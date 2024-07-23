@@ -24,18 +24,14 @@ export const useSignIn = (props: signInProps) => {
     };
 
     await axios
-      .post("https://user1721711071996.requestly.tech/signin?", body)
+      .post("https://user1721711071996.requestly.tech/signin", body)
       .then((res: AxiosResponse<IUser>) => {
         if (res.status >= 200 && res.status < 300) {
-          console.log(res.data);
-
           navigate({ to: `/`, search: {name: res?.data?.name} });
           props.resetForm();
         }
       })
-      .catch((err: AxiosError) => {
-        console.log(err);
-
+      .catch((err: AxiosError & {response: {data: {message: string}}}) => {
         setErrorMessage(err?.response?.data?.message ?? err.message);
       });
   };

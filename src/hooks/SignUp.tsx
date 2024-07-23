@@ -26,7 +26,7 @@ export const useSignUp = (props: signUpProps) => {
     };
 
     await axios
-      .post("https://crm.web-hub.online/api/register", body)
+      .post("https://user1721711071996.requestly.tech/signin", body)
       .then((res: AxiosResponse<IUser>) => {
         if (res.status >= 200 && res.status < 300) {
           navigate({to: '/'})
